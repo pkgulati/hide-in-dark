@@ -4,7 +4,11 @@
 #include <conio.h>
 #include <dos.h>
 #include <stdlib.h>
- 
+#include <string.h>
+#include <alloc.h>
+#include <bios.h>
+#include <math.h>
+
 int InitGraphics()
 {
       int grd, grm;
@@ -13,15 +17,15 @@ int InitGraphics()
       detectgraph(&grd,&grm);
       // initialize the graphics mode with initgraph
       initgraph(&grd, &grm, "c:\\TC\\BGI");
- 
+
       gresult = graphresult();
       if(gresult != grOk)
       {
-            printf(grapherrormsg(gresult));
-            getch();
-            return -1;
+	    printf(grapherrormsg(gresult));
+	    getch();
+	    return -1;
       }
- 
+
       // set the background color
       setbkcolor(BLACK);
       // set the foreground color
@@ -30,7 +34,7 @@ int InitGraphics()
       rectangle(0,0,getmaxx(),getmaxy());
       return 1;
 }
- 
+
 void main()
 {
       int i, x, y, w;
@@ -39,20 +43,78 @@ void main()
       int xradius, yradius;
       int cx, cy;
 
+
+      printf("ok\n");
+      getch();
+
       if(InitGraphics() == -1)
 	    return;
 
-      for (i = 10; i < 300; i = i + 1)
-      {
-	  delay(10);
-	  if (i > 1)
-	  {
-	     setcolor(BLACK);
-	     circle(i-1,100,20);
-	     setcolor(WHITE);
-	  }
 
-	  circle(i, 100, 20);
+	    int xmax =  getmaxx();
+	    int ymax = getmaxy();
+
+      int xpos = rand() % xmax;
+      int ypos = rand() % ymax;
+      int color = rand() % 12;
+      putpixel(xpos, ypos, color);
+
+      i = 100;
+      int xdir = 1;
+      int ydir = 0;
+      int j =100;
+      while (1)
+      {
+
+	   if (kbhit()) {
+	     break;
+	   }
+	   delay(10);
+	   setcolor(BLACK);
+	   circle(i,j,20);
+	   setcolor(WHITE);
+
+	   int r = rand() % 300;
+	   switch(r){
+	      case 51:
+		  xdir = 1;
+		  ydir = 0;
+		  break;
+	      case 52:
+		  xdir = 0;
+		  ydir = 1;
+		  break;
+	       case 53:
+		  xdir = -1;
+		  ydir = 0;
+		  break;
+	       case 54:
+		  xdir = 0;
+		  ydir = -1;
+		  break;
+	   }
+
+	   if (xdir == 0 && ydir == 0)
+	      xdir = 1;
+
+	   if (xdir) {
+	       if (i > xmax - 30)
+			xdir = -1;
+		if (i < 30)
+			xdir = 1;
+	   }
+
+	   if (ydir) {
+	       if (j > ymax - 30)
+			ydir = -1;
+		if (j < 30)
+			ydir = 1;
+	   }
+
+
+	   i += xdir;
+	   j += ydir;
+	   circle(i, j, 20);
       }
 
       // fill an ellipse will BLUE color SOLID
