@@ -1,0 +1,12 @@
+{
+  "sortDirectoriesFirst": true,
+
+  "jwolfe.file-tree-exclude.list": [
+        "node_modules",
+        "bower_components",
+        "tmp",
+        "*.exe",
+        "*.obj",
+        "*.bak"
+    ]
+}
