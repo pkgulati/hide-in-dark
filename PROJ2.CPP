@@ -16,6 +16,8 @@ struct torch {
     int ydir;
     int rad;
     int angle;
+    int color;
+    int steps;
 };
 
 torch tr[3];
@@ -68,76 +70,32 @@ void main()
       if(InitGraphics() == -1)
 	    return;
 
+      int xmax =  getmaxx();
+      int ymax = getmaxy();
+
       for (i=0; i < 3; i++) {
 	    tr[i].x = 100 + i * 30;
 	    tr[i].y = 100 + i * 50;
 	    tr[i].rad = 30;
-	    setcolor(BLUE);
-        circle (tr[i].x, tr[i].y, tr[i].rad);
+        tr[i].steps = 0;
       }
+      tr[0].color = YELLOW;
+      tr[1].color = BLUE;
+      tr[2].color = WHITE;
+      tr[0].xdir = 1;
+      tr[1].xdir = 0;
+      tr[2].xdir = -1;
+      tr[0].ydir = 0;
+      tr[1].ydir = -1;
+      tr[2].ydir = 0;
 
       me.x = 240;
       me.y = 300;
-      line(me.x, me.y, me.x+10, me.y + 10);
+      rectangle(me.x, me.y, me.x+10, me.y + 10);
 
       int endgame = 0 ;
-      int step = 3;
+      int step = 2;
       int idle = 0;
-
-      while(1) {
-	   idle++;
-	   if (kbhit()) {
-	       idle=0;
-	       char ch=getch();
-	       setcolor(BLACK);
-	       line(me.x, me.y, me.x+10, me.y);
-	       switch(ch)
-	       {
-		   case 72: // upward
-		       me.x = me.x;
-		       me.y = me.y -step;
-		       break;
-		   case 75: // left
-		       me.x = me.x-step;
-		       me.y = me.y;
-		       break;
-		   case 77: // right
-		       me.x = me.x + step;
-		       me.y = me.y;
-		       break;
-		   case 80:  // down
-		       me.x = me.x;
-		       me.y = me.y + step;
-		       break;
-		   case 27:
-		       endgame = 1;
-		       break;
-	       }
-	       if (endgame)
-		   break;
-	       if (idle)
-	       {
-		  if (idle > 5000)
-		     delay(20);
-		  else if (idle > 500)
-		    delay(10);
-
-	       }
-	       setcolor(YELLOW);
-	       line(me.x, me.y, me.x+10, me.y);
-	       }
-
-      }
-
-      getch();
-      exit(0);
-      int xmax =  getmaxx();
-      int ymax = getmaxy();
-
-      int xpos = rand() % xmax;
-      int ypos = rand() % ymax;
-      int color = rand() % 12;
-      putpixel(xpos, ypos, color);
 
       i = 100;
       int xdir = 1;
@@ -145,59 +103,104 @@ void main()
       int j =100;
       while (1)
       {
+            // erase torch
+            // erase me
+            // if key move me
+            // move torch
+            // draw torch and me
+            setcolor(BLACK);
+            for (i=0; i < 3; i++) {
+                circle (tr[i].x, tr[i].y, tr[i].rad);
+                tr[i].steps++;
+            }
+            rectangle(me.x, me.y, me.x+5, me.y+5);
+            idle++;
+	        if (kbhit()) {
+                idle=0;
+	            char ch=getch();
+	   	        switch(ch)
+	            {
+                   case 72: // upward
+                       me.x = me.x;
+                       me.y = me.y -step;
+                       break;
+                   case 75: // left
+                       me.x = me.x-step;
+                       me.y = me.y;
+                       break;
+                   case 77: // right
+                       me.x = me.x + step;
+                       me.y = me.y;
+                       break;
+                   case 80:  // down
+                       me.x = me.x;
+                       me.y = me.y + step;
+                       break;
+                   case 27:
+                       endgame = 1;
+                       break;
+                   }
+               }
+               if (endgame)
+                    break;
+	           setcolor(WHITE);
 
-	   if (kbhit()) {
-	     break;
-	   }
-	   delay(10);
-	   setcolor(BLACK);
-	   circle(i,j,20);
-	   setcolor(WHITE);
+               rectangle(me.x, me.y, me.x+10, me.y + 10);
 
-	   int r = rand() % 300;
-	   switch(r){
-
-	      case 1:   //left
-		  xdir = -1;
-		  ydir = 0;
-		  break;
-	      case 2:  // right
-		  xdir = 1;
-		  ydir = 0;
-		  break;
-	       case 3:   // up
-		  xdir = 0;
-		  ydir = -1;
-		  break;
-	       case 4:   // down
-		  xdir = 0;
-		  ydir = 1;
-		  break;
-	   }
-
-	   if (xdir == 0 && ydir == 0)
-	      xdir = 1;
-
-	   if (xdir) {
-	       if (i > xmax - 30)
-			xdir = -1;
-		if (i < 30)
-			xdir = 1;
-	   }
-
-	   if (ydir) {
-	       if (j > ymax - 30)
-			ydir = -1;
-		if (j < 30)
-			ydir = 1;
-	   }
+               for (i=0; i < 3; i++) {
+                   if (tr[i].steps > 50)
+                   {
+                       int r = rand() % 10;
+                       switch(r){
+                            case 1:   //left
+			      tr[i].xdir = -1;
+			      tr[i].ydir = 0;
+			      tr[i].steps = 0;
+			      break;
+			   case 2:  // right
+			      tr[i].xdir = 1;
+			      tr[i].ydir = 0;
+			       tr[i].steps = 0;
+			      break;
+			    case 3:   // up
+			      tr[i].xdir = 0;
+			      tr[i].ydir = -1;
+			       tr[i].steps = 0;
+			      break;
+			    case 4:   // down
+			      tr[i].xdir = 0;
+			      tr[i].ydir = 1;
+			       tr[i].steps = 0;
+			      break;
+			   }
+		   }
 
 
-	   i += xdir;
-	   j += ydir;
-	   circle(i, j, 20);
+		       if (tr[i].xdir) {
+			   if (tr[i].x > xmax - 30)
+			                 tr[i].xdir = -1;
+                       if (tr[i].x < 30)
+			                 xdir = 1;
+	               }
+
+                   if (tr[i].ydir) {
+                       if (tr[i].y > ymax - 30)
+                         tr[i].ydir = -1;
+                    if (tr[i].y < 30)
+                        tr[i].ydir = 1;
+                   }
+
+                    circle (tr[i].x, tr[i].y, tr[i].rad);
+                if (idle)
+               {
+                    if (idle > 5000)
+                        delay(20);
+                    else if (idle > 500)
+                        delay(10);
+               }
+
       }
-
+        }
       // fill an ellipse will BLUE color SOLID
       // setfillstyle(SOLID_FILL, BLUE);
       // fillellipse(cx, cy, xradius, yradius);
