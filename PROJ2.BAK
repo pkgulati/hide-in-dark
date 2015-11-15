@@ -9,6 +9,26 @@
 #include <bios.h>
 #include <math.h>
 
+struct torch {
+    int x;
+    int y;
+    int xdir;
+    int ydir;
+    int rad;
+    int angle;
+};
+
+torch tr[3];
+
+struct {
+    int x;
+    int y;
+    int xdir;
+    int ydir;
+    int rad;
+    int angle;
+} me;
+
 int InitGraphics()
 {
       int grd, grm;
@@ -44,15 +64,63 @@ void main()
       int cx, cy;
 
 
-      printf("ok\n");
-      getch();
-
+     
       if(InitGraphics() == -1)
 	    return;
 
+      for (i=0; i < 3; i++) {
+	    tr[i].x = 100 + i * 30;
+	    tr[i].y = 100 + i * 50;
+	    tr[i].rad = 30;
+	    setcolor(BLUE);
+        circle (tr[i].x, tr[i].y, tr[i].rad); 
+      }
+          
+      me.x = 240;
+      me.y = 300;
+      line(me.x, me.y, me.x+10, me.y + 10);
 
-	    int xmax =  getmaxx();
-	    int ymax = getmaxy();
+      int endgame = 0 ;
+      int step = 3;
+      while(1) {
+	   if (kbhit()) {
+	       char ch=getch();
+	       setcolor(BLACK);
+	       line(me.x, me.y, me.x+10, me.y);
+	       switch(ch)
+	       {
+		   case 72: // upward
+		       me.x = me.x;
+		       me.y = me.y -step;
+		       break;
+		   case 75: // left
+		       me.x = me.x-step;
+		       me.y = me.y;
+		       break;
+		   case 77: // right
+		       me.x = me.x + step;
+		       me.y = me.y;
+		       break;
+		   case 80:  // down
+		       me.x = me.x;
+		       me.y = me.y + step;
+		       break;
+		   case 27:
+		       endgame = 1;
+		       break;
+	       }
+	       if (endgame)
+		   break;
+	       setcolor(YELLOW);
+	       line(me.x, me.y, me.x+10, me.y);
+	       }
+
+      }
+
+      getch();
+      exit(0);
+      int xmax =  getmaxx();
+      int ymax = getmaxy();
 
       int xpos = rand() % xmax;
       int ypos = rand() % ymax;
@@ -65,7 +133,7 @@ void main()
       int j =100;
       while (1)
       {
-
+          
 	   if (kbhit()) {
 	     break;
 	   }

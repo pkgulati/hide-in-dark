@@ -76,21 +76,22 @@ void main()
 
 	   int r = rand() % 300;
 	   switch(r){
-	      case 51:
-		  xdir = 1;
-		  ydir = 0;
-		  break;
-	      case 52:
-		  xdir = 0;
-		  ydir = 1;
-		  break;
-	       case 53:
+
+	      case 1:   //left
 		  xdir = -1;
 		  ydir = 0;
 		  break;
-	       case 54:
+	      case 2:  // right
+		  xdir = 1;
+		  ydir = 0;
+		  break;
+	       case 3:   // up
 		  xdir = 0;
 		  ydir = -1;
+		  break;
+	       case 4:   // down
+		  xdir = 0;
+		  ydir = 1;
 		  break;
 	   }
 
