@@ -153,46 +153,47 @@ void main()
                        int r = rand() % 10;
                        switch(r){
                             case 1:   //left
-			      tr[i].xdir = -1;
-			      tr[i].ydir = 0;
-			      tr[i].steps = 0;
-			      break;
-			   case 2:  // right
-			      tr[i].xdir = 1;
-			      tr[i].ydir = 0;
-			       tr[i].steps = 0;
-			      break;
-			    case 3:   // up
-			      tr[i].xdir = 0;
-			      tr[i].ydir = -1;
-			       tr[i].steps = 0;
-			      break;
-			    case 4:   // down
-			      tr[i].xdir = 0;
-			      tr[i].ydir = 1;
-			       tr[i].steps = 0;
-			      break;
-			   }
-		   }
+                              tr[i].xdir = -1;
+                              tr[i].ydir = 0;
+                              tr[i].steps = 0;
+                              break;
+                           case 2:  // right
+                              tr[i].xdir = 1;
+                              tr[i].ydir = 0;
+                               tr[i].steps = 0;
+                              break;
+                            case 3:   // up
+                              tr[i].xdir = 0;
+                              tr[i].ydir = -1;
+                               tr[i].steps = 0;
+                              break;
+                            case 4:   // down
+                              tr[i].xdir = 0;
+                              tr[i].ydir = 1;
+                               tr[i].steps = 0;
+                              break;
+                           }
+		              }
 
-
-		       if (tr[i].xdir) {
+            tr[i].x = tr[i].x + tr[i].xdir;
+            tr[i].y = tr[i].y + tr[i].ydir;
+            if (tr[i].xdir) {
 			   if (tr[i].x > xmax - 30)
 			                 tr[i].xdir = -1;
                        if (tr[i].x < 30)
 			                 xdir = 1;
-	               }
+	         }
 
-                   if (tr[i].ydir) {
+             if (tr[i].ydir) {
                        if (tr[i].y > ymax - 30)
                          tr[i].ydir = -1;
                     if (tr[i].y < 30)
                         tr[i].ydir = 1;
-                   }
+            }
 
-                    circle (tr[i].x, tr[i].y, tr[i].rad);
-                if (idle)
-               {
+            circle (tr[i].x, tr[i].y, tr[i].rad);
+            if (idle)
+            {
                     if (idle > 5000)
                         delay(20);
                     else if (idle > 500)
