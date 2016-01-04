@@ -2,6 +2,8 @@
 This program is written by Komal Gulati
 for project in Delhi Public School Bangalore
 For any queries please contact komalgulati1@gmail.com
+Purpose of game to capture black squares as much as possible
+Avoid crossing opponents color it has negative scoring
 */
 
 #include <bios.h>
@@ -24,8 +26,9 @@ For any queries please contact komalgulati1@gmail.com
 // to make it slow increase delay interval
 // depending upon your computer
 // default 100 to 300
-#define DELAY_INTERVAL 	 400
+#define DELAY_INTERVAL 	 150
 #define NUM_PLAYERS	 3
+#define WINNING_SCORE    1000
 
 // directions are clockwise increasing
 // so that if we want to use for cos or sin methods
@@ -514,11 +517,6 @@ int isleftempty(player& pl)
     return false;
 }
 
-void decidemove2(player& pl)
-{
-
-}
-
 void decidemove(player& pl)
 {
     if (pl.wrongsteps <= 3 &&
@@ -692,6 +690,24 @@ void main()
 	for (i = 0; i < NUM_PLAYERS; i++)
 	{
 	      updatescore(plist[i]);
+	if (plist[i].score >= WINNING_SCORE)
+	{
+	    endgame = true;
+	    setfillstyle(1, BLUE);
+
+	    bar(200,120,439,300);
+	    outtextxy(250,200,"GAME OVER");
+	    if (i == 0)
+	    {
+		outtextxy(250,250,"YOU WIN");
+	    }
+	    else
+	    {
+		outtextxy(250,250,"YOU LOSE");
+	    }
+	    showscoreboard();
+            char tr = getch();
+        }
 	}
 
     }
